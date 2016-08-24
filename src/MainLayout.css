@@ -1,0 +1,62 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-size: 26px;
+  font-family: "helvetica";
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: normal;
+  padding: 7px 0 0 0;
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  border: 2px solid black;
+  font-size: inherit;
+  padding: 5px 7px;
+  margin: 7px 0 7px 0;
+  width: 282px;
+  outline: none;
+}
+
+.giphy-attribution {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+};
+
+img.giphy-logo {
+  width: 150px;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.SearchBox {
+  padding-bottom: 3px;
+}
+
+.PlaceholderSearchResult {
+  height: 150px;
+}
+
+.SearchResult img {
+  width: 100%;
+  height: 100%;
+}
+
+.SearchResult {
+  flex-grow: 1;
+  height: 150px;
+  width: 300px;
+}
