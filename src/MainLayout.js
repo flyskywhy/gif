@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './MainLayout.css';
 import SearchBox from './SearchBox';
 import SearchResults from './SearchResults';
+import giphyLogo from './giphy-logo.png';
 
 class MainLayout extends Component {
   render() {
@@ -20,7 +21,7 @@ class MainLayout extends Component {
           <a href="http://giphy.com">
             <img alt="Powered by giphy"
                  className="giphy-logo"
-                 src="images/Poweredby_640px-White_HorizText.png"
+                 src={giphyLogo}
                  width="100px"/>
           </a>
         </div>
