@@ -59,7 +59,7 @@ class App extends Component {
 
   parseImageUrlsFromResponse(result) {
     return result.data.map(function(gifData) {
-      return gifData.images.original.url;
+      return gifData.images.fixed_width.url;
       /* return gifData.images.downsized_still.url;*/
     });
   };
