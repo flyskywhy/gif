@@ -14,7 +14,7 @@ class App extends Component {
     };
   };
 
-  onQueryChange(event) {
+  updateQuery(event) {
     var query = event.target.value;
     this.searchIfQueryValid(query);
     this.setState({ query: query });
@@ -24,7 +24,7 @@ class App extends Component {
     if (query.length > 0) {
       var url = ["http://api.giphy.com/v1/gifs/search?q=",
                  query,
-                 "&api_key=dc6zaTOxFJmzC",
+                 "&api_key=dc6zaTOxFJmzC", // public beta key
                  "&limit=5"].join("");
       this.search(url);
     } else {
@@ -37,7 +37,7 @@ class App extends Component {
     $.get(url).then((result) => {
       if (this.isLatestSearchToComplete(searchId)) {
         this.setImageUrls(this.parseImageUrlsFromResponse(result));
-        this.setState({ mostRecentlyDisplayedSearchId: searchId });
+        this.setMostRecentlyDisplayedSearchId(searchId);
       }
     });
   };
@@ -57,10 +57,13 @@ class App extends Component {
     this.setState({ imageUrls: imageUrls });
   };
 
+  setMostRecentlyDisplayedSearchId(searchId) {
+    this.setState({ mostRecentlyDisplayedSearchId: searchId });
+  };
+
   parseImageUrlsFromResponse(result) {
     return result.data.map(function(gifData) {
       return gifData.images.fixed_width.url;
-      /* return gifData.images.downsized_still.url;*/
     });
   };
 
@@ -69,7 +72,7 @@ class App extends Component {
       <div className="App">
         <MainLayout
             query={this.state.query}
-            onQueryChange={this.onQueryChange.bind(this)}
+            onQueryChange={this.updateQuery.bind(this)}
             imageUrls={this.state.imageUrls} />
       </div>
     );
