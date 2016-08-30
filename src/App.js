@@ -21,21 +21,12 @@ class App extends Component {
   };
 
   imageUrlsForQuery(query) {
-    if (query.length > 0) {
-      var url = ["http://api.giphy.com/v1/gifs/search?q=",
-                 query,
-                 "&api_key=dc6zaTOxFJmzC", // public beta key
-                 "&limit=5"].join("");
-      return this.search(url);
-    } else {
-      return new Promise(function(resolve) {
-        resolve([]);
-      });
-    }
-  };
-
-  search(url) {
     this.abortPreviousSearchRequest();
+    var url = ["http://api.giphy.com/v1/gifs/search?q=",
+               query,
+               "&api_key=dc6zaTOxFJmzC", // public beta key
+               "&limit=5"].join("");
+
     var searchRequest = this.previousSearchRequest = $.get(url);
     return searchRequest
       .then(this.parseImageUrlsFromResponse.bind(this));
