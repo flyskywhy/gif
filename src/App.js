@@ -9,56 +9,46 @@ class App extends Component {
     this.state = {
       query: "",
       imageUrls: [],
-      nextSearchId: 0,
-      mostRecentlyDisplayedSearchId: undefined
+      previousSearchRequest: undefined
     };
   };
 
-  updateQuery(event) {
+  receiveNewQuery(event) {
     var query = event.target.value;
-    this.searchIfQueryValid(query);
     this.setState({ query: query });
+    this.imageUrlsForQuery(query)
+      .then(this.setImageUrls.bind(this))
   };
 
-  searchIfQueryValid(query) {
+  imageUrlsForQuery(query) {
     if (query.length > 0) {
       var url = ["http://api.giphy.com/v1/gifs/search?q=",
                  query,
                  "&api_key=dc6zaTOxFJmzC", // public beta key
                  "&limit=5"].join("");
-      this.search(url);
+      return this.search(url);
     } else {
-      this.setImageUrls([]);
+      return new Promise(function(resolve) {
+        resolve([]);
+      });
     }
   };
 
   search(url) {
-    var searchId = this.getNextSearchId();
-    $.get(url).then((result) => {
-      if (this.isLatestSearchToComplete(searchId)) {
-        this.setImageUrls(this.parseImageUrlsFromResponse(result));
-        this.setMostRecentlyDisplayedSearchId(searchId);
-      }
-    });
+    this.abortPreviousSearchRequest();
+    var searchRequest = this.previousSearchRequest = $.get(url);
+    return searchRequest
+      .then(this.parseImageUrlsFromResponse.bind(this));
   };
 
-  getNextSearchId() {
-    var searchId = this.state.nextSearchId;
-    this.setState({ nextSearchId: searchId + 1 });
-    return searchId;
-  };
-
-  isLatestSearchToComplete(searchId) {
-    return this.state.mostRecentlyDisplayedSearchId === undefined ||
-           searchId > this.state.mostRecentlyDisplayedSearchId;
+  abortPreviousSearchRequest() {
+    if (this.previousSearchRequest) {
+      this.previousSearchRequest.abort();
+    }
   };
 
   setImageUrls(imageUrls) {
     this.setState({ imageUrls: imageUrls });
-  };
-
-  setMostRecentlyDisplayedSearchId(searchId) {
-    this.setState({ mostRecentlyDisplayedSearchId: searchId });
   };
 
   parseImageUrlsFromResponse(result) {
@@ -72,7 +62,7 @@ class App extends Component {
       <div className="App">
         <MainLayout
             query={this.state.query}
-            onQueryChange={this.updateQuery.bind(this)}
+            onQueryChange={this.receiveNewQuery.bind(this)}
             imageUrls={this.state.imageUrls} />
       </div>
     );
